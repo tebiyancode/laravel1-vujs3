@@ -10,16 +10,13 @@ use Illuminate\Validation\Rule;
 class PageController extends Controller
 {
      public function getPages(){
-        $page_id =Page::where('page','pages')->value('id');
-        if(!auth()->user()->role->permissions()
-        ->where('page_id', $page_id)
-        ->where('read',1)
-        ->exists()){
+        if(!get_permission('pages','read')){
             return response()->json([
                 'status' => 401,
-                'message' => 'You are not allowed to read permissions',
+                'message' => 'You are not allowed to read pages',
             ]);
         }
+
         $pages = Page::with(['pages','page_name','permissions'])
         ->orderBy('order', 'asc')
         ->get();
@@ -30,18 +27,15 @@ class PageController extends Controller
      }
 
      public function store(Request $request){
-        $page_id =Page::where('page','pages')->value('id');
+
 
 if($request->id){
-    if(!auth()->user()->role->permissions()
-->where('page_id', $page_id)
-->where('update',1)
-->exists()){
-    return response()->json([
-        'status' => 401,
-        'message' => 'You are not allowed to update permissions',
-    ]);
-}
+    if(!get_permission('pages','update')){
+        return response()->json([
+            'status' => 401,
+            'message' => 'You are not allowed to update pages',
+        ]);
+    }
     $request->validate([
         'page'=>['required',
         Rule::unique('pages')->ignore($request->id,'id'),
@@ -64,13 +58,10 @@ if($request->id){
 $request->validate([
     'page'=>['required',]
 ]);
-if(!auth()->user()->role->permissions()
-->where('page_id', $page_id)
-->where('create',1)
-->exists()){
+if(!get_permission('pages','create')){
     return response()->json([
         'status' => 401,
-        'message' => 'You are not allowed to update permissions',
+        'message' => 'You are not allowed to create pages',
     ]);
 }
         $page = Page::create([

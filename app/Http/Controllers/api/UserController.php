@@ -11,6 +11,12 @@ class UserController extends Controller
 
     public function indexUsers()
     {
+        if(!get_permission('users','read')){
+            return response()->json([
+                'status' => 401,
+                'message' => 'You are not allowed to read users',
+            ]);
+        }
         $users = User::with('role')->paginate(10);
         return response()->json([
             'message' => 'success get users',
@@ -20,6 +26,12 @@ class UserController extends Controller
     public function store(Request $request)
     {
        if($request->id){
+        if(!get_permission('users','update')){
+            return response()->json([
+                'status' => 401,
+                'message' => 'You are not allowed to update users',
+            ]);
+        }
         User::find($request->id)->update([
             'name' => $request->name,
             'father_name' => $request->father_name,
@@ -35,6 +47,12 @@ class UserController extends Controller
 
         ]);
        }
+       if(!get_permission('users','create')){
+        return response()->json([
+            'status' => 401,
+            'message' => 'You are not allowed to create users',
+        ]);
+    }
         User::create([
          'name' => $request->name,
          'father_name' => $request->father_name,
