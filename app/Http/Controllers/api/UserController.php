@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
 
-    public function indexUsers()
+    public function indexUsers(Request $request)
     {
         if(!get_permission('users','read')){
             return response()->json([
@@ -17,7 +17,14 @@ class UserController extends Controller
                 'message' => 'You are not allowed to read users',
             ]);
         }
-        $users = User::with('role')->paginate(10);
+
+        if($request->search){
+            $users = User::where('id', '=',$request->search)->orWhere('name', 'like', "%{$request->search}%")
+            ->with('role')->paginate(10);
+        }else{
+            $users = User::with('role')->paginate(10);
+        }
+
         return response()->json([
             'message' => 'success get users',
             'users' => $users

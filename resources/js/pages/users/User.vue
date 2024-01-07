@@ -4,10 +4,15 @@ import AddUser from "./AddUser.vue";
 import { onMounted } from "@vue/runtime-core";
 import axios from "axios";
 import { toast } from "vue3-toastify";
+import Paginate from "vuejs-paginate-next";
+
 const isEdit = ref(false);
 const user = ref({});
 const Users = ref([]);
 const page = ref(1);
+const search = ref("");
+const length = ref(1);
+const max = ref(3);
 const perUser = ref(JSON.parse(localStorage.getItem("perUser")));
 const chickPermission=(page,per)=>{
     let permission = perUser.value.find(
@@ -41,8 +46,9 @@ const addUser = () => {
   user.value = false;
 };
 const getUsers= (page) =>{
-    axios.get(`index-users?page=${page}`).then((res) => {
+    axios.get(`index-users?page=${page} && search=${search.value}`).then((res) => {
         Users.value = res.data.users.data;
+        length.value = res.data.users.last_page
 
     });
 }
@@ -71,6 +77,7 @@ onMounted(() => {
       </div>
       <div class="card-body p-0">
         <div class="table-responsive">
+            <h4 class="card-title"><input class="form-control" v-model="search" @input="getUsers(page)" placeholder="search" /></h4>
           <table class="table table-bordered text-center" width="100%">
             <thead>
               <tr>
@@ -111,6 +118,16 @@ onMounted(() => {
               </tr>
             </tbody>
           </table>
+          <Paginate
+            v-model="page"
+            @click="getUsers(page)"
+            :page-count="length"
+            :page-range="max"
+            :prev-text="$t('previous')"
+            :next-text="$t('next')"
+            :container-class="'pagination'"
+            >
+            </Paginate>
         </div>
       </div>
     </div>
