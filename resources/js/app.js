@@ -1,5 +1,8 @@
 import './bootstrap';
 import './plugins/axios';
+import vuetify from './vuetify'
+import 'vuetify/dist/vuetify.min.css';
+import 'vuetify/styles';
 import router from './router';
 import { createApp } from 'vue';
 import Home from './layouts/Home.vue';
@@ -11,5 +14,6 @@ const app = createApp({});
 app.component('home-component', Home);
 app.use(router);
 app.use(i18n);
+app.use(vuetify);
 app.use(Vue3Toast,{autoClose: 3000});
 app.mount('#app');
