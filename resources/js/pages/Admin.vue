@@ -139,8 +139,35 @@ const ex11=ref(['red', 'indigo', 'orange', 'primary', 'secondary', 'success', 'i
       </v-container>
     </v-card-text>
   </v-card>
-  <v-avatar color="surface-variant" size="300"></v-avatar>
+   
+  <v-btn
+        class="ma-2"
+        color="primary"
+      >
+        Accept
+        <v-icon
+          end
+          icon="mdi-checkbox-marked-circle"
+        ></v-icon>
+      </v-btn>
+      <div>
+      <v-btn
+        class="ma-2"
+        variant="text"
+        icon="mdi-thumb-up"
+        color="blue-lighten-2"
+      ></v-btn>
+
+      <v-btn
+        class="ma-2"
+        variant="text"
+        icon="mdi-thumb-down"
+        color="red-lighten-2"
+      ></v-btn>
+    </div>
+
                     </div>
+
                     <div class="row">
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">

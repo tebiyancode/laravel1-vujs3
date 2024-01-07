@@ -2,6 +2,14 @@
 import { ref } from "vue";
 const email = ref("");
 const password = ref("");
+const ruleEmail=ref([
+        v => !!v || 'Email is required',
+
+      ]);
+const rulePassword=ref([
+        v => !!v || 'password is required',
+        v => (v && v.length <= 8) || 'Name must be less than 8 characters',
+      ]);
 const Login = () => {
   if (email.value === "" || password.value === "") {
     alert("Please fill all fields");
@@ -27,6 +35,37 @@ const Login = () => {
 </script>
 <template>
     <!-- Outer Row -->
+    <v-card
+    class="mx-auto"
+    width="400"
+    prepend-icon="mdi-home"
+  >
+    <template v-slot:title>
+        {{ $t('Login In') }}
+    </template>
+
+    <v-card-text>
+        <v-sheet max-width="300" class="mx-auto">
+    <v-form validate-on="submit lazy" @submit.prevent="Login()">
+      <v-text-field
+      variant="solo"
+        v-model="email"
+        :rules="ruleEmail"
+        :label="$t('email')"
+        type="email"
+      ></v-text-field>
+      <v-text-field
+      variant="solo"
+        v-model="password"
+        :rules="rulePassword"
+        :label="$t('password')"
+        type="password"
+      ></v-text-field>
+      <v-btn type="submit" block class="mt-2">{{ $t('Login In') }}</v-btn>
+    </v-form>
+  </v-sheet>
+    </v-card-text>
+  </v-card>
     <div class="row justify-content-center">
       <div class="col-xl-10 col-lg-12 col-md-9">
         <div class="card o-hidden border-0 shadow-lg my-5">

@@ -6,6 +6,7 @@ import Footer from "./FooterComponent.vue";
 const toggled = ref("");
 const token = localStorage.getItem("token");
 const user = ref("");
+const Dir = localStorage.getItem("direction");
 const textAlign = ref("right");
 if(token){
 axios.get('/user').then((res) => {
@@ -34,7 +35,9 @@ axios.get('/user').then((res) => {
   <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>
     <div class="content-wrapper container-xxl p-0">
+        <v-locale-provider :rtl="Dir=='rtl'">
           <router-view :user="user" ></router-view>
+        </v-locale-provider>
         </div>
         </div>
         <!-- /.container-fluid -->
