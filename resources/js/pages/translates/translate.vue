@@ -66,9 +66,10 @@
         <div class="card">
           <div class="card-header">
             <h4 class="card-title">{{ $t("Table langs") }}</h4>
+            <h4 class="card-title"><input class="form-control" v-model="search" @input="getLangs(page)" placeholder="search" /></h4>
           </div>
           <div class="table-responsive">
-            <table class="table">
+            <table class="table m-1">
               <thead class="table-dark">
                 <tr>
                   <th>{{ $t("language") }}</th>
@@ -102,6 +103,16 @@
                 </tr>
               </tbody>
             </table>
+            <Paginate
+            v-model="page"
+            @click="getLangs(page)"
+            :page-count="length"
+            :page-range="max"
+            :prev-text="$t('previous')"
+            :next-text="$t('next')"
+            :container-class="'pagination'"
+            >
+            </Paginate>
           </div>
         </div>
       </div>
@@ -112,6 +123,7 @@
 import { ref } from "@vue/reactivity";
 import { onMounted, inject } from "@vue/runtime-core";
 import { toast } from "vue3-toastify";
+import Paginate from "vuejs-paginate-next";
 import axios from "axios";
 const errors = ref([]);
 const fields = ref({
@@ -141,6 +153,11 @@ const langs = ref([]);
 const isAdd = ref(false);
 const isEdit = ref(false);
 const keyValue = ref("");
+const search = ref("");
+const page = ref(1);
+const length = ref(1);
+const max = ref(3);
+
 const refForm = ref([
   {
     lang: "ar",
@@ -219,12 +236,13 @@ const editLang = (key) => {
     keyValue.value = key;
   });
 };
-const getLangs = async () => {
-  await axios.get(`langs`).then((r) => {
-    langs.value = r.data.langs;
+const getLangs = async (page=1) => {
+  await axios.get(`langs?page=${page} && search=${search.value}`).then((r) => {
+    langs.value = r.data.langs.data;
+    length.value = r.data.langs.last_page;
   });
 };
 onMounted(async () => {
-  await getLangs();
+  await getLangs(page.value);
 });
 </script>

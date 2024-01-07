@@ -53,9 +53,17 @@ class LangController extends Controller
             ]);
         }
     }
-    public function Langs()
+    public function Langs(Request $request)
     {
-        $langs = Lang::orderBy('key')->get();
+        $search = $request->search;
+        if( $search){
+            $langs = Lang::where('key', 'like' ,"%{$search}%")->orWhere('value', 'like',"%{$search}%")
+            ->orderBy('key')
+            ->paginate(10);
+        }else{
+
+            $langs = Lang::orderBy('key')->paginate(10);
+        }
         return response()->json([
             'langs' => $langs,
             'success' => true,
