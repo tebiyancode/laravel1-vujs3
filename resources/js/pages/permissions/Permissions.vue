@@ -43,6 +43,7 @@ const getPermission = (page_id, role_id, per) => {
 const getRoles = () => {
   axios.get(`get-roles`).then((res) => {
     Roles.value = res.data.roles;
+    Roles.value.push({id:0,name_role:'اختر دور'})
     // notify(res.data.message);
   });
 };
