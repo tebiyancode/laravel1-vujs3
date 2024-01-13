@@ -50,7 +50,7 @@ watchEffect(() => {
     <div class="navbar-header">
       <ul class="nav navbar-nav flex-row">
         <li class="nav-item me-auto">
-          <a href="/indexvue" class="logo logo-light">
+          <a href="/admin" class="logo logo-light">
             <img
               src="/app-assets/images/1679163509.png"
               alt=""

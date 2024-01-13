@@ -2,6 +2,8 @@ import './bootstrap';
 import './plugins/axios';
 import vuetify from './vuetify'
 import 'vuetify/dist/vuetify.min.css';
+import 'vue-select/dist/vue-select.css'
+import v2Select from 'vue-select';
 import '@mdi/font/css/materialdesignicons.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'vuetify/styles';

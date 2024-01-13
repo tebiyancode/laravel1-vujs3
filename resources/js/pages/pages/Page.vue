@@ -97,7 +97,7 @@ const chickPermission=(page,per)=>{
                     {{ page.id }}
                 </td>
                 <td>
-                    {{ page.page }}
+                    {{$t(page.page)  }}
                 </td>
               </tr>
             </tbody>

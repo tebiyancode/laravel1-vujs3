@@ -1,10 +1,10 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 import { toast } from "vue3-toastify";
-import { watchEffect } from '@vue/runtime-core';
-const emit = defineEmits(['goBack']);
-const props = defineProps(["page","Pages"]);
-const Pages= ref([])
+import { watchEffect } from "@vue/runtime-core";
+const emit = defineEmits(["goBack"]);
+const props = defineProps(["page", "Pages"]);
+const Pages = ref([]);
 const notify = (message) => {
   toast.success(message, {
     autoClose: 3000,
@@ -17,99 +17,120 @@ const notifyError = (message) => {
     position: toast.POSITION.TOP_CENTER,
   });
 };
-const item = ref({})
+const item = ref({});
 const goBack = () => {
- item.value = {}
-    emit('goBack',false)
-}
+  item.value = {};
+  emit("goBack", false);
+};
 const createPage = () => {
-    if (item.value.page === ''  ) {
-           alert('Please fill all fields');
-       } else {
-    axios.post('/create-page',  item.value).then((res) => {
-        notify(res.data.message)
-        emit('goBack',false)
-        item.value = {}
-    }).catch((err) => {
-        notifyError(err.response.data.message)
-    })
-}
-}
-watchEffect(()=>{
-  if(props.page){
-    item.value = props.page
-  }else{
-    item.value = {
-        page:'',
-        path:'#',
-        icon:'fa-file-text-o',
-        page_id:0,
-        order:0
-    }
+  if (item.value.page === "") {
+    alert("Please fill all fields");
+  } else {
+    axios
+      .post("/create-page", item.value)
+      .then((res) => {
+        notify(res.data.message);
+        emit("goBack", false);
+        item.value = {};
+      })
+      .catch((err) => {
+        notifyError(err.response.data.message);
+      });
   }
-  if(props.Pages){
-      Pages.value = props.Pages
-      Pages.value.push({id:0,page:'no page'})
+};
+watchEffect(() => {
+  if (props.page) {
+    item.value = props.page;
+  } else {
+    item.value = {
+      page: "",
+      path: "#",
+      icon: "fa-file-text-o",
+      page_id: 0,
+      order: 0,
+    };
+  }
+  if (props.Pages) {
+    Pages.value = props.Pages;
+    Pages.value.push({ id: 0, page: "no page" });
   }
 });
 </script>
 <template>
-<div class="card o-hidden border-0 shadow-lg my-5">
-    <div class="card-body p-0">
-        <!-- Nested Row within Card Body -->
-        <div class="row">
-            <div class="col-lg-7">
-                <div class="p-5">
-                    <div class="text-center">
-                        <h1    class="h4 text-gray-900 mb-4">
-                            {{  props.page ? $t('update') : $t('create')   }}
-                        </h1>
-                    </div>
-                    <form class="page">
-                        <div class="form-group row">
-                            <div class="col-md-6 ">
-                                <label for="inputPage" class="form-label">{{ $t('page') }}</label>
-                                <input type="text" v-model="item.page" class="form-control form-control-page"
-                                    placeholder="  page">
-                            </div>
-                            <div class="col-md-6 ">
-                                <label for="inputPath" class="form-label">{{ $t('path') }}</label>
-                                <input type="text" v-model="item.path" class="form-control form-control-page"
-                                    placeholder="  path">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-6 ">
-                                <label for="inputIcon" class="form-label">{{ $t('icon') }}</label>
-                                <input type="text" v-model="item.icon" class="form-control form-control-page"
-                                    placeholder="  icon">
-                            </div>
-                            <div class="col-md-6 ">
-                                <label for="inputPage_id" class="form-label">{{ $t('page_id') }}</label>
-                                    <select class="form-control" v-model="item.page_id">
-                                <option v-for="Page in Pages" :key="Page.id" :value="Page.id">
-                                    {{Page.page}} </option>
-                               </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-6 ">
-                                <label for="inputOrder" class="form-label">{{ $t('order') }}</label>
-                                <input type="number" v-model="item.order" class="form-control form-control-page"
-                                    placeholder="order">
-                            </div>
-                        </div>
-                        <a @click="createPage()" class="btn btn-primary btn-page btn-block m-1">
-                             {{  props.page  ? $t('update') : $t('create')   }}
-                        </a>
-                        <a @click="goBack()" class="btn btn-info btn-page btn-block m-1">
-                            {{ $t('back') }}
-                        </a>
-                    </form>
-                    <hr>
-                </div>
-            </div>
+  <v-card class="mx-auto p-2" prepend-icon="mdi-home">
+    <template v-slot:title>
+      {{ props.user ? $t("update") : $t("create") }}
+    </template>
+
+    <v-card-text>
+      <v-form validate-on="submit lazy" @submit.prevent="createPage()">
+        <div class="row g-3 mt-5">
+          <v-sheet max-width="300" class="col-md-6 m-auto">
+            <v-text-field
+              v-model="item.page"
+              :rules="[(v) => !!v || 'page is required']"
+              variant="solo"
+              :label="$t('page')"
+            ></v-text-field>
+          </v-sheet>
+          <v-sheet max-width="300" class="col-md-6 m-auto">
+            <v-text-field
+              v-model="item.path"
+              :rules="[(v) => !!v || 'path is required']"
+              variant="solo"
+              :label="$t('path')"
+            ></v-text-field>
+          </v-sheet>
+          <v-sheet max-width="300" class="col-md-6 m-auto">
+            <v-text-field
+              v-model="item.icon"
+              :rules="[(v) => !!v || 'icon is required']"
+              variant="solo"
+              :label="$t('icon')"
+            ></v-text-field>
+          </v-sheet>
+
+          <v-sheet max-width="350" class="col-md-6 m-auto">
+            <v-select
+              v-model="item.page_id"
+              :label="$t('page')"
+              variant="solo"
+              :items="Pages"
+              item-value="id"
+              item-title="page"
+            >
+            </v-select>
+          </v-sheet>
+          <v-sheet max-width="300" class="col-md-6 m-auto">
+            <v-text-field
+              v-model="item.order"
+              :rules="[(v) => !!v || 'order is required']"
+              variant="solo"
+              :label="$t('order')"
+            ></v-text-field>
+          </v-sheet>
         </div>
-    </div>
-</div>
+        <v-sheet max-width="300" class="col-md-6 m-auto">
+            <v-btn
+              type="submit"
+              block
+              class="mt-2"
+              :color="props.page ?'primary':'success' "
+              :text="props.page ? $t('update') : $t('create')"
+            ></v-btn>
+
+            <v-btn
+            color="warning"
+             @click="goBack()"
+              block
+              class="mt-2"
+              :text="$t('back')"
+            ></v-btn>
+          </v-sheet>
+      </v-form>
+    </v-card-text>
+
+    <hr />
+  </v-card>
+  
 </template>

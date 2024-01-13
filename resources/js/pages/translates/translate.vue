@@ -1,72 +1,76 @@
 <template>
   <div>
     <div class="demo-inline-spacing p-2">
-      <button  v-if="chickPermission('translates','create')  " @click="addShow" class="btn btn-primary btn-relief-primary">
+      <button
+        v-if="chickPermission('translates', 'create')"
+        @click="addShow"
+        class="btn btn-primary btn-relief-primary"
+      >
         {{ isAdd ? $t("back") : $t("add") }}
       </button>
     </div>
     <div v-if="isAdd">
-      <div class="row">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-header">
-              <h4  v-if="chickPermission('translates','create') || chickPermission('translates','edit')" class="card-title">
-                <span v-if="isEdit">
-                  {{ $t("Edit setup") }}
-                </span>
-                <span v-else>
-                  {{ $t("Add settings") }}
-                </span>
-              </h4>
+      <v-card max-width="400" class="mx-auto p-2" prepend-icon="mdi-home">
+        <template
+          v-if="
+            chickPermission('translates', 'create') ||
+            chickPermission('translates', 'edit')
+          "
+          v-slot:title
+        >
+          {{ isEdit ? $t("update") : $t("create") }}
+        </template>
+        <v-card-text>
+          <v-form validate-on="submit lazy" @submit.prevent="addLang()">
+            <div class="m-auto center">
+              <v-sheet max-width="300">
+                <v-text-field
+                  v-model="keyValue"
+                  :rules="[(v) => !!v || 'keyValue is required']"
+                  variant="solo"
+                  :label="$t('key')"
+                ></v-text-field>
+              </v-sheet>
+              <v-sheet max-width="300" v-for="(lang, index) in refForm" :key="index">
+                <v-text-field
+                  v-model="lang.value"
+                  :rules="[(v) => !!v || `${lang.value} is required`]"
+                  variant="solo"
+                  :label="$t(lang.lang)"
+                ></v-text-field>
+              </v-sheet>
             </div>
-            <div class="card-body">
-              <hr />
-              <div class="row">
-                <div class="col-sm-6 mb-3 mb-sm-0">
-                  <label>
-                    {{ $t("key") }}
-                  </label>
-                  <input
-                    type="text"
-                    v-model="keyValue"
-                    class="form-control form-control-page"
-                    placeholder="  keyValue"
-                  />
-                </div>
-              </div>
-              <div class="row" v-for="(lang, index) in refForm" :key="index">
-                <div class="col-sm-6 mb-3 mb-sm-0">
-                  <label>
-                    {{ $t(lang.lang) }}
-                  </label>
-                  <input
-                    type="text"
-                    v-model="lang.value"
-                    class="form-control form-control-page"
-                    placeholder="  keyValue"
-                  />
-                </div>
-              </div>
-              <div class="col-sm-6 mb-3 mb-sm-0">
-                <a
-                v-if="chickPermission('translates','create') || chickPermission('translates','update')"
-                  @click="addLang()"
-                  class="btn btn-primary btn-role btn-block m-1"
-                >
-                  {{ isEdit ? "update  " : "create  " }}
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            <v-sheet max-width="300" class="col-md-6 m-auto">
+              <v-btn
+                v-if="
+                  chickPermission('translates', 'create') ||
+                  chickPermission('translates', 'update')
+                "
+                type="submit"
+                block
+                class="mt-2"
+                :color="isEdit ? 'primary' : 'success'"
+                :text="isEdit ? $t('update') : $t('create')"
+              ></v-btn>
+            </v-sheet>
+          </v-form>
+        </v-card-text>
+        <hr />
+      </v-card>
     </div>
     <div v-if="!isAdd" class="row" id="table-head">
       <div class="col-12">
         <div class="card">
           <div class="card-header">
             <h4 class="card-title">{{ $t("Table langs") }}</h4>
-            <h4 class="card-title"><input class="form-control" v-model="search" @input="getLangs(page)" placeholder="search" /></h4>
+            <h4 class="card-title">
+              <input
+                class="form-control"
+                v-model="search"
+                @input="getLangs(page)"
+                placeholder="search"
+              />
+            </h4>
           </div>
           <div class="table-responsive">
             <table class="table m-1">
@@ -75,7 +79,9 @@
                   <th>{{ $t("language") }}</th>
                   <th>{{ $t("key") }}</th>
                   <th>{{ $t("value") }}</th>
-                  <th v-if="chickPermission('translates','edit')" >{{ $t("Actions") }}</th>
+                  <th v-if="chickPermission('translates', 'edit')">
+                    {{ $t("Actions") }}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -89,13 +95,9 @@
                   <td>
                     {{ lang.value }}
                   </td>
-                  <td  v-if="chickPermission('translates','edit')" >
+                  <td v-if="chickPermission('translates', 'edit')">
                     <div class="d-flex">
-                      <button
-
-                        class="btn btn-primary btn-sm"
-                        @click="editLang(lang.key)"
-                      >
+                      <button class="btn btn-primary btn-sm" @click="editLang(lang.key)">
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
@@ -104,13 +106,13 @@
               </tbody>
             </table>
             <Paginate
-            v-model="page"
-            @click="getLangs(page)"
-            :page-count="length"
-            :page-range="max"
-            :prev-text="$t('previous')"
-            :next-text="$t('next')"
-            :container-class="'pagination'"
+              v-model="page"
+              @click="getLangs(page)"
+              :page-count="length"
+              :page-range="max"
+              :prev-text="$t('previous')"
+              :next-text="$t('next')"
+              :container-class="'pagination'"
             >
             </Paginate>
           </div>
@@ -138,17 +140,16 @@ const notify = (message) => {
   });
 };
 const perUser = ref(JSON.parse(localStorage.getItem("perUser")));
-const chickPermission=(page,per)=>{
-    let permission = perUser.value.find(
-        permission => permission.page.page === page
-        && permission[per] === 1
-        );
-        if(permission){
-            return true;
-        }else{
-            return false;
-        }
-}
+const chickPermission = (page, per) => {
+  let permission = perUser.value.find(
+    (permission) => permission.page.page === page && permission[per] === 1
+  );
+  if (permission) {
+    return true;
+  } else {
+    return false;
+  }
+};
 const langs = ref([]);
 const isAdd = ref(false);
 const isEdit = ref(false);
@@ -236,7 +237,7 @@ const editLang = (key) => {
     keyValue.value = key;
   });
 };
-const getLangs = async (page=1) => {
+const getLangs = async (page = 1) => {
   await axios.get(`langs?page=${page} && search=${search.value}`).then((r) => {
     langs.value = r.data.langs.data;
     length.value = r.data.langs.last_page;

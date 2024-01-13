@@ -1,11 +1,12 @@
 <script setup>
 import { ref } from "vue";
 import { toast } from "vue3-toastify";
+
 import { onMounted, watchEffect } from "@vue/runtime-core";
 const emit = defineEmits(["goBack"]);
 const props = defineProps(["user"]);
-onMounted(async () => {
-  await getRoles();
+onMounted(  () => {
+    getRoles();
 });
 const notify = (message) => {
   toast.success(message, {
@@ -20,17 +21,16 @@ const notifyError = (message) => {
   });
 };
 const perUser = ref(JSON.parse(localStorage.getItem("perUser")));
-const chickPermission=(page,per)=>{
-    let permission = perUser.value.find(
-        permission => permission.page.page === page
-        && permission[per] === 1
-        );
-        if(permission){
-            return true;
-        }else{
-            return false;
-        }
-}
+const chickPermission = (page, per) => {
+  let permission = perUser.value.find(
+    (permission) => permission.page.page === page && permission[per] === 1
+  );
+  if (permission) {
+    return true;
+  } else {
+    return false;
+  }
+};
 const id = ref("");
 const name = ref("");
 const email = ref("");
@@ -47,7 +47,7 @@ const getRoles = () => {
     Roles.value = res.data.roles;
   });
 };
-const genders = ref([{ type: "ذكر" }, { type: "أنثى" }]);
+const genders = ref(["ذكر","أنثى"]);
 const confirmPass = () => {
   if (password.value !== password_confirmation.value) {
     alert("Password not match");
@@ -108,6 +108,10 @@ const createUser = () => {
       });
   }
 };
+const rulePassword=ref([
+        v => !!v || 'password is required',
+        v => (v && v.length <= 8) || 'Name must be less than 8 characters',
+      ]);
 watchEffect(() => {
   if (props.user) {
     id.value = props.user.id;
@@ -122,122 +126,125 @@ watchEffect(() => {
 });
 </script>
 <template>
-    <div class="card">
-      <div class="card-body p-2">
-        <!-- Nested Row within Card Body -->
-        <div class="row">
-          <div class="text-center">
-            <h1 class="h4 text-gray-900 mb-2">
-              {{ props.user ? $t("update") : $t("create") }}
-            </h1>
-          </div>
-          <form class="row g-3">
-            <div class="col-md-6">
-               <label for="inputEmail4" class="form-label">{{ $t('name') }}</label>
-                <input
-                  type="text"
-                  v-model="name"
-                  class="form-control "
-                  id="exampleName"
-                  placeholder="  Name"
-                />
-            </div>
-                <div class="col-md-6">
-               <label for="inputEmail4" class="form-label">{{ $t('father name') }}</label>
-                <input
-                  type="text"
-                  v-model="father_name"
-                  class="form-control "
-                  id="father_name"
-                  placeholder="father_name"
-                />
+  <v-card class="mx-auto p-2" prepend-icon="mdi-home">
+    <template v-slot:title>
+      {{ props.user ? $t("update") : $t("create") }}
+    </template>
+
+    <v-card-text>
+      <v-form validate-on="submit lazy" @submit.prevent="createUser()">
+        <div class="row g-3 mt-5">
+          <v-sheet max-width="300" class="col-md-6 m-auto">
+            <v-text-field
+              v-model="name"
+              :rules="[v => !!v || 'name is required']"
+              variant="solo"
+              :label="$t('name')"
+
+            ></v-text-field>
+          </v-sheet>
+          <v-sheet max-width="300" class="col-md-6 m-auto">
+            <v-text-field
+              v-model="father_name"
+              :rules="[v => !!v || 'father_name is required']"
+              variant="solo"
+              :label="$t('father name')"
+            ></v-text-field>
+          </v-sheet>
+          <v-sheet max-width="300" class="col-md-6 m-auto">
+            <v-text-field
+              v-model="date_of_birth"
+              :rules="[v => !!v || 'date_of_birth is required']"
+              variant="solo"
+              type="number"
+              :label="$t('date of birth')"
+            ></v-text-field>
+          </v-sheet>
+          <v-sheet max-width="300" class="col-md-6 m-auto">
+            <v-text-field
+              v-model="mobile"
+              :rules="[v => !!v || 'mobile is required']"
+              variant="solo"
+              type="number"
+              :label="$t('mobile')"
+            ></v-text-field>
+          </v-sheet>
+          <v-sheet max-width="300" class="col-md-6 m-auto">
+            <v-text-field
+              v-model="email"
+              :rules="[v => !!v || 'email is required']"
+              variant="solo"
+              type="email"
+              :label="$t('email')"
+            ></v-text-field>
+          </v-sheet>
+          <v-sheet max-width="350" class="col-md-6 m-auto">
+             <v-select
+              v-model="gender"
+              :rules="[v => !!v || 'gender is required']"
+              variant="solo"
+              :label="$t('gender')"
+              :items="genders"
+              return-object
+            ></v-select>
+          </v-sheet>
+          <v-sheet max-width="350" class="col-md-6 m-auto">
+
+            <v-select
+              v-model="role_id"
+              :label="$t('role')"
+              variant="solo"
+              :items="Roles"
+              item-value="id"
+              item-title="name_role"
+
+            >
+            </v-select>
+          </v-sheet>
+          <div v-if="!props.user" class="form-group row">
+                <div class="col-md-3">
+                    <v-text-field
+                    variant="solo"
+                        v-model="password"
+                        :rules="rulePassword"
+                        :label="$t('password')"
+                        type="password"
+                    ></v-text-field>
               </div>
-              <div class="col-md-6">
-               <label for="inputEmail4" class="form-label">{{ $t('gender') }}</label>
-                <select class="form-control" v-model="gender">
-                  <option
-                    v-for="gender in genders"
-                    :key="gender.type"
-                    :value="gender.type"
-                  >
-                    {{ gender.type }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-6">
-               <label for="inputEmail4" class="form-label">{{ $t('role') }}</label>
-                <select class="form-control" v-model="role_id">
-                  <option v-for="Role in Roles" :key="Role.id" :value="Role.id">
-                    {{ Role.name_role }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">{{ $t('date of birth') }}</label>
-                <input
-                  type="number"
-                  v-model="date_of_birth"
-                  class="form-control form-control-user"
-                  id="date_of_birth"
-                  placeholder="  date_of_birth"
-                />
-              </div>
-              <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">{{ $t('mobile') }}</label>
-                <input
-                  type="number"
-                  v-model="mobile"
-                  class="form-control form-control-user"
-                  id="mobile"
-                  placeholder="  mobile"
-                />
-              </div>
-              <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">{{ $t('email') }}</label>
-              <input
-                type="email"
-                v-model="email"
-                class="form-control form-control-user"
-                id="exampleInputEmail"
-                placeholder="Email Address"
-              />
-            </div>
-            <div v-if="!props.user" class="form-group row">
-                <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">{{ $t('password') }}</label>
-                <input
-                  type="password"
-                  v-model="password"
-                  class="form-control form-control-user"
-                  id="exampleInputPassword"
-                  placeholder="Password"
-                />
-              </div>
-              <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">{{ $t('password_confirmation') }}</label>
-                <input
-                  type="password"
-                  @change="confirmPass()"
-                  v-model="password_confirmation"
-                  class="form-control form-control-user"
-                  id="exampleRepeatPassword"
-                  placeholder="Repeat Password"
-                />
+              <div class="col-md-3">
+                <v-text-field
+                variant="solo"
+                    v-model="password_confirmation"
+                    :rules="rulePassword"
+                    @change="confirmPass()"
+                    :label="$t('password_confirmation')"
+                    type="password"
+                ></v-text-field>
               </div>
             </div>
-            <div class="  row p-2">
-              <div v-if="chickPermission('users','create') || chickPermission('users','update')" class="col-8">
-                <a @click="createUser()" class="btn btn-primary btn-user btn-block m-1">
-                  {{ props.user ? $t("update") : $t("create") }}
-                </a>
-              </div>
-              <div class="col-4">
-                <a @click="goBack()" class="btn btn-info btn-user btn-block m-1"> {{ $t('back') }} </a>
-              </div>
-            </div>
-          </form>
-          <hr />
         </div>
-      </div>
-  </div>
+          <v-sheet max-width="300" class="col-md-6 m-auto">
+            <v-btn
+            v-if="chickPermission('users', 'create') || chickPermission('users', 'update')"
+              type="submit"
+              block
+              class="mt-2"
+              :color="props.user ?'primary':'success' "
+              :text="props.user ? $t('update') : $t('create')"
+            ></v-btn>
+
+            <v-btn
+            color="warning"
+             @click="goBack"
+              block
+              class="mt-2"
+              :text="$t('back')"
+            ></v-btn>
+          </v-sheet>
+      </v-form>
+    </v-card-text>
+
+
+    <hr />
+  </v-card>
 </template>

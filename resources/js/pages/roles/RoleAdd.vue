@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 import { toast } from "vue3-toastify";
-import { watchEffect } from '@vue/runtime-core';
-const emit = defineEmits(['goBack']);
+import { watchEffect } from "@vue/runtime-core";
+const emit = defineEmits(["goBack"]);
 const props = defineProps(["role"]);
 const notify = (message) => {
   toast.success(message, {
@@ -16,61 +16,68 @@ const notifyError = (message) => {
     position: toast.POSITION.TOP_CENTER,
   });
 };
-const item = ref({})
+const item = ref({});
 const goBack = () => {
-    item.value = {}
-    emit('goBack',false)
-}
+  item.value = {};
+  emit("goBack", false);
+};
 const createRole = () => {
-    if (item.value.role === ''  ) {
-           alert('Please fill all fields');
-       } else {
-    axios.post('/create-role',  item.value).then((res) => {
-        notify(res.data.message)
-        emit('goBack',false)
-        item.value = {}
-    }).catch((err) => {
-        notifyError(err.response.data.message)
-    })
-}
-}
-watchEffect(()=>{
-  if(props.role){
-    item.value = props.role
+  if (item.value.role === "") {
+    alert("Please fill all fields");
+  } else {
+    axios
+      .post("/create-role", item.value)
+      .then((res) => {
+        notify(res.data.message);
+        emit("goBack", false);
+        item.value = {};
+      })
+      .catch((err) => {
+        notifyError(err.response.data.message);
+      });
+  }
+};
+watchEffect(() => {
+  if (props.role) {
+    item.value = props.role;
   }
 });
 </script>
 <template>
-<div class="card o-hidden border-0 shadow-lg my-5">
-    <div class="card-body p-0">
-        <!-- Nested Row within Card Body -->
-        <div class="row">
-            <div class="col-lg-7">
-                <div class="p-5">
-                    <div class="text-center">
-                        <h1    class="h4 text-gray-900 mb-4">
-                            {{  props.role ? $t('update') : $t('create')   }}
-                        </h1>
-                    </div>
-                    <form class="role">
-                        <div class="form-group row">
-                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                <label for="inputEmail3" class="col-form-label">{{ $t('name') }}</label>
-                                <input type="text" v-model="item.name_role" class="form-control form-control-page"
-                                    placeholder="  name_role">
-                            </div>
-                        </div>
-                        <a @click="createRole()" class="btn btn-primary btn-role btn-block m-1">
-                             {{  props.role  ? $t('update') : $t('create')   }}
-                        </a>
-                        <a @click="goBack()" class="btn btn-info btn-role btn-block m-1">
-                            {{ $t('back') }}
-                        </a>
-                    </form>
-                    <hr>
-                </div>
-            </div>
+  <v-card class="mx-auto p-2" prepend-icon="mdi-home">
+    <template v-slot:title>
+      {{ props.role ? $t("update") : $t("create") }}
+    </template>
+    <v-card-text>
+      <v-form validate-on="submit lazy" @submit.prevent="createRole()">
+        <div class="row g-3 mt-5">
+          <v-sheet max-width="300" class="col-md-6 m-auto">
+            <v-text-field
+              v-model="item.name_role"
+              :rules="[(v) => !!v || 'role is required']"
+              variant="solo"
+              :label="$t('role')"
+            ></v-text-field>
+          </v-sheet>
         </div>
-    </div>
-</div>
+        <v-sheet max-width="300" class="col-md-6 m-auto">
+          <v-btn
+            type="submit"
+            block
+            class="mt-2"
+            :color="props.role ? 'primary' : 'success'"
+            :text="props.role ? $t('update') : $t('create')"
+          ></v-btn>
+          <v-btn
+            color="warning"
+            @click="goBack()"
+            block
+            class="mt-2"
+            :text="$t('back')"
+          ></v-btn>
+        </v-sheet>
+      </v-form>
+    </v-card-text>
+    <hr />
+  </v-card>
 </template>
