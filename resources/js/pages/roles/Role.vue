@@ -60,13 +60,13 @@ const chickPermission=(page,per)=>{
     <div v-if="!isEdit" class="card o-hidden border-0 shadow-lg my-5">
       <div class="card-header">
         <h4 class="card-title" >{{ $t('table') }} {{ $t('roles') }} </h4>
-        <button
-         v-if="chickPermission('roles','create')"
-          class="btn btn-primary btn-circle btn-sm float-end"
-          @click="addRole"
-        >
-            <i class="fas fa-plus"></i>
-        </button>
+        <v-btn
+        v-if="chickPermission('roles','create')"
+        @click="addRole"
+        class="ma-2"
+        color="indigo"
+        icon="mdi-plus"
+      ></v-btn>
       </div>
       <div class="card-body p-0">
         <div class="table-responsive">
@@ -85,13 +85,14 @@ const chickPermission=(page,per)=>{
             <tbody>
               <tr v-for="role in Roles" :key="role.id">
                 <td  v-if="chickPermission('roles','delete') || chickPermission('roles','edit')" >
-                    <button
+
+                  <v-btn
                   v-if="chickPermission('roles','edit')"
                    @click="roleEdit(role)"
-                  class="btn btn-info btn-circle btn-sm">
-                    <i class="fas fa-edit"></i>
-                  </button>
-
+                    class="ma-2"
+                    color="orange-darken-2"
+                    icon="mdi-pencil"
+                ></v-btn>
 
                 </td>
                 <td>

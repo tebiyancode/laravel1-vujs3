@@ -67,13 +67,14 @@ onMounted(() => {
     <div v-if="!isEdit" class="card o-hidden border-0 shadow-lg my-5">
       <div class="card-header">
         <h4 class="card-title" >{{ $t('table') }} {{ $t('users') }} </h4>
-        <button
+
+        <v-btn
         v-if="chickPermission('users','create') "
-          class="btn btn-primary btn-circle btn-sm float-end"
-          @click="addUser"
-        >
-            <i class="fas fa-plus"></i>
-        </button>
+        @click="addUser"
+        class="ma-2"
+        color="indigo"
+        icon="mdi-plus"
+      ></v-btn>
       </div>
       <div class="card-body p-0">
         <div class="table-responsive">
@@ -96,9 +97,12 @@ onMounted(() => {
                   <button hidden class="btn btn-danger btn-circle btn-sm m-1">
                     <i class="fas fa-trash"></i>
                   </button>
-                  <button @click="userEdit(user)" class="btn btn-info btn-circle btn-sm">
-                    <i class="fas fa-edit"></i>
-                  </button>
+                  <v-btn
+                    @click="userEdit(user)"
+                    class="ma-2"
+                    color="orange-darken-2"
+                    icon="mdi-pencil"
+                ></v-btn>
                 </td>
                 <td>
                     {{ user.id }}

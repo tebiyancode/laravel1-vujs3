@@ -97,9 +97,14 @@
                   </td>
                   <td v-if="chickPermission('translates', 'edit')">
                     <div class="d-flex">
-                      <button class="btn btn-primary btn-sm" @click="editLang(lang.key)">
-                        <i class="fa fa-edit"></i>
-                      </button>
+
+                      <v-btn
+                    @click="editLang(lang.key)"
+
+                    class="ma-2"
+                    color="orange-darken-2"
+                    icon="mdi-pencil"
+                ></v-btn>
                     </div>
                   </td>
                 </tr>

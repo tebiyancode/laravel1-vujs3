@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from 'vue';
-import PageAdd from "./PageAdd.vue";
+import AppFontAdd from "./AppFontAdd.vue";
 import { onMounted } from "@vue/runtime-core";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 const isEdit = ref(false);
-const page = ref({});
-const Pages = ref([]);
+const appFont = ref({});
+const AppFonts = ref([]);
 const notify = (message) => {
   toast.success(message, {
     autoClose: 3000,
@@ -19,27 +19,27 @@ const notifyError = (message) => {
     position: toast.POSITION.TOP_CENTER,
   });
 };
-const pageEdit = (pageSelect) => {
+const appFontEdit = (appFontSelect) => {
   isEdit.value = true;
-  page.value = pageSelect;
+  appFont.value = appFontSelect;
 };
-const addPage = () => {
+const addAppFont = () => {
   isEdit.value = true;
-  page.value = false;
+  appFont.value = false;
 };
-const getPages= () =>{
-    axios.get(`get-pages`).then((res) => {
-        Pages.value = res.data.pages;
+const getAppFonts= () =>{
+    axios.get(`get-app-fonts`).then((res) => {
+        AppFonts.value = res.data.appFonts;
 
     });
 }
 const goBack = (event) => {
   isEdit.value = event;
-  page.value = false;
-  getPages(page);
+  appFont.value = false;
+  getAppFonts(appFont);
 };
 onMounted(() => {
-    getPages();
+    getAppFonts();
 });
 const perUser = ref(JSON.parse(localStorage.getItem("perUser")));
 const chickPermission=(page,per)=>{
@@ -56,44 +56,39 @@ const chickPermission=(page,per)=>{
 </script>
 <template>
   <div>
-    <PageAdd v-if="isEdit"  @goBack="goBack($event)" :page="page" :Pages="Pages" />
+    <AppFontAdd v-if="isEdit"  @goBack="goBack($event)" :appFont="appFont" />
     <div v-if="!isEdit" class="card o-hidden border-0 shadow-lg my-5">
       <div class="card-header">
-        <h4 class="card-title" >  {{ $t('table') }} {{ $t('pages') }}</h4>
-
+        <h4 class="card-title" >{{ $t('table') }} {{ $t('appFonts') }} </h4>
         <v-btn
-
-        @click="addPage"
+        v-if="chickPermission('appFonts','create')"
+        @click="addAppFont"
         class="ma-2"
         color="indigo"
         icon="mdi-plus"
       ></v-btn>
-
-
       </div>
       <div class="card-body p-0">
         <div class="table-responsive">
           <table class="table table-bordered text-center" width="100%">
             <thead>
               <tr>
-                <th   v-if="chickPermission('pages','delete') || chickPermission('pages','edit')"
+                <th
+                v-if="chickPermission('appFonts','edit')"
                 >{{ $t('actions') }}</th>
                 <th>{{ $t('id') }}</th>
                 <th>{{ $t('name') }}</th>
+                <th v-if="chickPermission('appFonts','delete') ">{{ $t('delete') }}</th>
               </tr>
             </thead>
             <tfoot></tfoot>
             <tbody>
-              <tr v-for="page in Pages" :key="page.id">
-                <td  v-if="chickPermission('pages','delete') || chickPermission('pages','edit')" >
-                  <button
-                    v-if="chickPermission('pages','delete')"
-                   class="btn btn-danger btn-circle btn-sm m-1">
-                    <i class="fas fa-trash"></i>
-                  </button>
+              <tr v-for="appFont in AppFonts" :key="appFont.id">
+                <td  v-if="chickPermission('appFonts','delete') || chickPermission('appFonts','edit')" >
+
                   <v-btn
-                    @click="pageEdit(page)"
-                    v-if="chickPermission('pages','edit')"
+                  v-if="chickPermission('appFonts','edit')"
+                   @click="appFontEdit(appFont)"
                     class="ma-2"
                     color="orange-darken-2"
                     icon="mdi-pencil"
@@ -101,10 +96,18 @@ const chickPermission=(page,per)=>{
 
                 </td>
                 <td>
-                    {{ page.id }}
+                    {{ appFont.id }}
                 </td>
                 <td>
-                    {{$t(page.page)  }}
+                    {{ appFont.name_font }} <br />
+                    {{ appFont.path }}
+                </td>
+                <td v-if="chickPermission('appFonts','delete') " >
+                    <button
+
+                   class="btn btn-danger btn-circle btn-sm m-1">
+                    <i class="fas fa-trash"></i>
+                  </button>
                 </td>
               </tr>
             </tbody>
