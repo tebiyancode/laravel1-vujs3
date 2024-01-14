@@ -12,12 +12,16 @@
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     @include('layouts.app-assets-head')
     <style>
-         @font-face {
-            font-family: fontApp;
-            src: url({{('fonts/majallab.ttf')}});
-        }
+        @foreach ($fonts as $font )
+            @font-face {
+                        font-family: {{ $font->name_font }};
+                        src: url({{( $font->path)}});
+                    }
+     @endforeach
+
+
         body {
-            font-family: 'fontApp' !important;
+            font-family: 'Al-Jazeera-Arabic-Bold' !important;
             text-align: right !important;
             font-size: 22px;
         }
@@ -34,7 +38,7 @@
     </div>
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
-    
+
     <button class="btn btn-success btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
     @include('layouts.app-assets-script')
 </body>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\AppFontController;
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\GeneralSettingController;
 use App\Http\Controllers\api\LangController;
 use App\Http\Controllers\api\PageController;
 use App\Http\Controllers\api\PermissionController;
@@ -49,6 +50,9 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
 
     Route::get('/get-app-fonts', [AppFontController::class, 'getFonts']);
     Route::post('/create-app-font', [AppFontController::class, 'store']);
+
+    Route::get('/get-general_settings', [GeneralSettingController::class, 'index']);
+    Route::post('/create-general_setting', [GeneralSettingController::class, 'store']);
 
 
     Route::get('/get-permissions/{roleId}', [PermissionController::class, 'getPermissionRoleId']);

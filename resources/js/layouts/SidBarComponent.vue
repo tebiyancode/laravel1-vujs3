@@ -122,3 +122,9 @@ watchEffect(() => {
     </div>
   </div>
 </template>
+<style scoped>
+.navigation li a i{
+    font-size:18px;
+    color: #206a7c;
+}
+</style>
