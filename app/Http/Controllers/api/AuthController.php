@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\GeneralSetting;
 use App\Models\User;
 use App\Models\UserPhoto;
 use Illuminate\Http\Request;
@@ -79,8 +80,11 @@ class AuthController extends Controller
             }]);
         }
         ])->find($id);
+
+        $setting = GeneralSetting::with('font')->first();
         return response()->json([
             'status' => 200,
+            'setting' =>$setting,
             'user' => $user
         ]);
     }

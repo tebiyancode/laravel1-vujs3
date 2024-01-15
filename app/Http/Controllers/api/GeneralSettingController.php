@@ -21,7 +21,7 @@ class GeneralSettingController extends Controller
             ]);
         }
 
-        $GeneralSettings = GeneralSetting::get();
+        $GeneralSettings = GeneralSetting::with('font')->get();
         return response()->json([
             'message' => 'success get GeneralSettings',
             'GeneralSettings' => $GeneralSettings

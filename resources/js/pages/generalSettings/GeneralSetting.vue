@@ -78,6 +78,7 @@ const chickPermission=(page,per)=>{
                 >{{ $t('actions') }}</th>
                 <th>{{ $t('id') }}</th>
                 <th>{{ $t('name') }}</th>
+                <th>{{ $t('font') }}</th>
                 <th v-if="chickPermission('GeneralSettings','delete') ">{{ $t('delete') }}</th>
               </tr>
             </thead>
@@ -101,6 +102,10 @@ const chickPermission=(page,per)=>{
                 <td>
                     {{ generalSetting.name }} <br />
                     {{ generalSetting.logo }}
+                </td>
+                <td>
+                    {{ generalSetting.font.name_font }} <br />
+                    {{ generalSetting.font_size }}
                 </td>
                 <td v-if="chickPermission('GeneralSettings','delete') " >
                     <button

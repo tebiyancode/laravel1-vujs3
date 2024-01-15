@@ -18,4 +18,9 @@ class GeneralSetting extends Model
         'youtube'
     ];
     public $timestamps = false;
+
+    public function font()
+    {
+        return $this->belongsTo(AppFont::class,'font_id','id');
+    }
 }

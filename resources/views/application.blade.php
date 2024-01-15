@@ -21,9 +21,9 @@
 
 
         body {
-            font-family: 'Al-Jazeera-Arabic-Bold' !important;
+            font-family: {{ $setting['font']['name_font'] }} !important;
             text-align: right !important;
-            font-size: 22px;
+            font-size: {{ $setting['font_size'] }}em !important;
         }
         @include('layouts.app-assets-style') table tr:nth-child(even) {
             background: #eef0f2;

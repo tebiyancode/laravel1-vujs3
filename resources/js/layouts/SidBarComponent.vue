@@ -14,7 +14,7 @@ const filteredSubPages=(pages,per)=>{
 }
 const textAlign = ref("left");
 const token = localStorage.getItem("token");
-const Setting = JSON.parse(localStorage.getItem("Setting"));
+const setting = JSON.parse(localStorage.getItem("setting"));
 const chickPermission=(page_id,per)=>{
     let permission = perUser.value.find(
         permission => permission.page_id === page_id
@@ -52,7 +52,7 @@ watchEffect(() => {
         <li class="nav-item me-auto">
           <a href="/admin" class="logo logo-light">
             <img
-              src="/app-assets/images/1679163509.png"
+              :src="setting.logo?'/'+setting.logo:'/app-assets/images/1679163509.png'"
               alt=""
               height="60"
             />

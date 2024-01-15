@@ -6,12 +6,15 @@ import Footer from "./FooterComponent.vue";
 const toggled = ref("");
 const token = localStorage.getItem("token");
 const user = ref("");
+const setting = ref({});
 const Dir = localStorage.getItem("direction");
 const textAlign = ref("right");
 if(token){
 axios.get('/user').then((res) => {
       user.value = res.data.user;
+      setting.value = res.data.setting;
       localStorage.setItem("perUser", JSON.stringify(res.data.user.role.permissions));
+      localStorage.setItem("setting", JSON.stringify(res.data.setting));
     });
 }
 </script>
