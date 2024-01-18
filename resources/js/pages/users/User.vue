@@ -14,6 +14,17 @@ const search = ref("");
 const length = ref(1);
 const max = ref(3);
 const perUser = ref(JSON.parse(localStorage.getItem("perUser")));
+const fields ={
+    'الرقم' : 'id',
+    'الاسم' : 'name',
+    'اسم الأب' : 'father_name',
+    'المواليد' : 'date_of_birth',
+    'الجنس' : 'gender',
+    'رقم الهاتف' : 'mobile',
+    'الإيميل' : 'email',
+    'الدور' : 'role.name_role',
+
+}
 const chickPermission=(page,per)=>{
     let permission = perUser.value.find(
         permission => permission.page.page === page
@@ -79,6 +90,17 @@ onMounted(() => {
       <div class="card-body p-0">
         <div class="table-responsive">
             <h4 class="card-title"><input class="form-control" v-model="search" @input="getUsers(page)" placeholder="search" /></h4>
+            <h4 class="card-title">
+                <download-excel
+                class="btn btn-success"
+                :data="Users"
+                :worksheet="'worksheet'"
+                :name="'name'"
+                :fields="fields"
+                >
+                {{ $t('download') }}
+                </download-excel>
+            </h4>
           <table class="table table-bordered text-center" width="100%">
             <thead>
               <tr>
