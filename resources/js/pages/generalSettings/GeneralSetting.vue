@@ -109,7 +109,6 @@ const chickPermission=(page,per)=>{
                 </td>
                 <td v-if="chickPermission('GeneralSettings','delete') " >
                     <button
-
                    class="btn btn-danger btn-circle btn-sm m-1">
                     <i class="fas fa-trash"></i>
                   </button>
