@@ -30,7 +30,6 @@ const addRole = () => {
 const getRoles= () =>{
     axios.get(`get-roles`).then((res) => {
         Roles.value = res.data.roles;
-
     });
 }
 const goBack = (event) => {
