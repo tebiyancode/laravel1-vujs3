@@ -1,0 +1,22 @@
+sudo apt update && sudo apt upgrade -y;
+sh <(curl https://cyberpanel.net/install.sh || wget -O - https://cyberpanel.net/install.sh);
+sh <(curl https://raw.githubusercontent.com/usmannasir/cyberpanel/stable/preUpgrade.sh || wget -O - https://raw.githubusercontent.com/usmannasir/cyberpanel/stable/preUpgrade.sh);
+php -v;
+sudo update-alternatives --set php /usr/bin/php8.1;
+sudo apt install php8.1-zip;
+sudo apt install php8.1-curl
+sudo apt install php8.1-mysql
+sudo apt install php-mbstring
+sudo systemctl restart php8.1-fpm;
+php artisan db:seed
+
+curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash -
+sudo apt install -y nodejs
+chmod +x node_modules/.bin/vite
+sudo chown -R $(whoami) /home/domain/public_html/node_modules
+chmod -R u+rwx /home/domain/public_html/node_modules
+
+npm run build            
+apt install docker.io;
+apt install docker-compose;
+crontab -e;
