@@ -90,9 +90,9 @@ router.beforeEach((to, from, next) => {
      {
         next({ name: 'Login' })
      }
-    else if ((to.name === 'Login' || to.name === 'Register' ) && isUserLoggedIn()) {
-        next({ name: 'Admin' })
-    }
+    // else if ((to.name === 'Login' || to.name === 'Register' ) && isUserLoggedIn()) {
+    //     next({ name: 'Admin' })
+    // }
     else {
         next()
     }
