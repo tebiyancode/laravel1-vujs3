@@ -79,7 +79,7 @@ const chickPermission=(page,per)=>{
                 <th   v-if="chickPermission('pages','delete') || chickPermission('pages','edit')"
                 >{{ $t('actions') }}</th>
                 <th>{{ $t('id') }}</th>
-                <th>{{ $t('name') }}</th>
+                <th>{{ $t('name') }} </th>
               </tr>
             </thead>
             <tfoot></tfoot>
