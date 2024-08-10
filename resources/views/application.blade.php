@@ -21,7 +21,7 @@
 
 
         body {
-            font-family: {{ $setting['font']['name_font'] }} !important;
+            font-family: {{ $setting['font']?$setting['font']['name_font']:'' }} !important;
             text-align: right !important;
             font-size: {{ $setting['font_size'] }}em !important;
         }
