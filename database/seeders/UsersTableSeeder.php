@@ -12,6 +12,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
+            'id' => '1',
             'name' => 'Admin User',
             'email' => 'admin@example.com',
             'email_verified_at' => Carbon::now(),

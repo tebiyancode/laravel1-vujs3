@@ -11,11 +11,13 @@ class RolesTableSeeder extends Seeder
     public function run()
     {
         DB::table('roles')->insert([
+            'id' => '1',
             'name_role' => 'Admin',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
         DB::table('roles')->insert([
+            'id' => '2',
             'name_role' => 'New user',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
