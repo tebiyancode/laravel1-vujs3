@@ -18,6 +18,7 @@ class PermissionsTableSeeder extends Seeder
             ['role_id' => 1, 'page_id' => 5, 'read' => true, 'edit' => true, 'create' => true, 'update' => true, 'delete' => true],
             ['role_id' => 1, 'page_id' => 6, 'read' => true, 'edit' => true, 'create' => true, 'update' => true, 'delete' => true],
             ['role_id' => 1, 'page_id' => 7, 'read' => true, 'edit' => true, 'create' => true, 'update' => true, 'delete' => true],
+            ['role_id' => 1, 'page_id' => 8, 'read' => true, 'edit' => true, 'create' => true, 'update' => true, 'delete' => true],
             ['role_id' => 2, 'page_id' => 2, 'read' => true, 'edit' => false, 'create' => false, 'update' => false, 'delete' => false],
             // Add more permissions as needed
         ];
