@@ -12,7 +12,7 @@ class PagesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('roles')->insert(
+        DB::table('pages')->insert(
             [
             'id' => '1',
             'page' => 'cpanel',
