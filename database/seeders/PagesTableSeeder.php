@@ -61,7 +61,7 @@ class PagesTableSeeder extends Seeder
                 'icon' => 'fa fa-language',
                 'path' => '/translates',
                 'order' => '7',
-                'page_id' => '5',
+                'page_id' => '1',
             ],
                 [
                     'id' => '7',
