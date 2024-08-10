@@ -50,8 +50,9 @@ watchEffect(() => {
     <div class="navbar-header">
       <ul class="nav navbar-nav flex-row">
         <li class="nav-item me-auto">
-          <a href="/admin" class="logo logo-light">
+          <a   v-if="setting" href="/admin" class="logo logo-light">
             <img
+
               :src="setting.logo?'/'+setting.logo:'/app-assets/images/1679163509.png'"
               alt=""
               height="60"
