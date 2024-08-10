@@ -19,12 +19,14 @@
                     }
      @endforeach
 
-
-        body {
-            font-family: {{ $setting['font']?$setting['font']['name_font']:'' }} !important;
+       @if ($setting)
+ body {
+            font-family: {{ $setting['font']? $setting['font']['name_font']:'' }} !important;
             text-align: right !important;
             font-size: {{ $setting['font_size'] }}em !important;
         }
+       @endif
+
         @include('layouts.app-assets-style') table tr:nth-child(even) {
             background: #eef0f2;
         }
